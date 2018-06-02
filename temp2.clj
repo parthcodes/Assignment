@@ -23,38 +23,35 @@
 (def sales(opt3))
    
 
+
+
+(defn fetchCID[custName]
+  (first (reduce-kv (fn [acc k v]
+    (if (=(get v 0)(str custName))
+         (cons  k acc )
+         acc))
+         #{} cust)))
+
+
+(defn fetchPrice[custName]
+ (first(reduce-kv (fn [acc k v]
+    (if (= k custName)
+      (cons  (get v 1) acc)
+      acc))
+   #{} prod)))
+
+
+ 
+
+(defn opt4 [] 
 (println "enter customername")
-(def cname(read-line))
-(println cname)
-
-
-; for the option 4
-;(defn ccc[custName]
-;  (first(reduce-kv (fn [acc k v]
-;    (if (=(get v 0)(str custName))
-;      (conj acc k)
-;      acc))
-;   #{} cust)))
-;
-;
-;(defn cccc[custName]
-;   (first(reduce-kv (fn [acc k v]
-;    (if (=(name k)(str custName))
-;      (conj acc (get v 1))
-;      acc))
-;   #{} prod)))
-;
-;(defn opt4 [] 
-; (println "enter customername")
-; (let[cname(read-line)]
-;  (println cname ":" (reduce + (into [] (reduce-kv (fn[acc k v]
-;     (if (= (get v 0)(str(name (ccc cname))))
-;       (conj acc(*(Integer/parseInt (cccc (str(get v 1))))(Integer/parseInt (get v 2))))
-;     acc))
-;   #{} sales))))))
-;   
-
-
+(let[cname(read-line)]
+ (println cname ":" (reduce  + (into [] (reduce-kv (fn[acc k v]
+    (if (= (get v 0) (fetchCID cname))
+      (conj acc (*(Float/parseFloat (fetchPrice (str(get v 1))))(Float/parseFloat (get v 2))))
+    acc))
+  #{} sales))))))
+   
 
 
 (defn salesMenu []
