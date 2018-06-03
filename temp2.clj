@@ -68,7 +68,7 @@
 (let[productName(read-line)]
   (println productName ":" (reduce  + (into [] (reduce-kv (fn[acc k v]
     (if (= (get v 1) (fetchProductId productName))
-      (conj acc (+(Integer/parseInt(get v 2))))
+      (conj acc (Integer/parseInt(get v 2)))
     acc))
   #{} sales))))))  
 
