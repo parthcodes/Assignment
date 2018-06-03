@@ -33,12 +33,21 @@
          #{} cust)))
 
 
+
 (defn fetchPrice[custName]
  (first(reduce-kv (fn [acc k v]
     (if (= k custName)
       (cons  (get v 1) acc)
       acc))
    #{} prod)))
+
+
+(defn fetchProductId[productName]
+  (first (reduce-kv (fn [acc k v]
+    (if (=(get v 0)(str productName))
+         (cons  k acc )
+         acc))
+         #{} prod)))
 
 
  
@@ -51,7 +60,16 @@
       (conj acc (*(Float/parseFloat (fetchPrice (str(get v 1))))(Float/parseFloat (get v 2))))
     acc))
   #{} sales))))))
-   
+
+
+(defn opt5 []
+(println "Enter productname")
+(let[productName(read-line)]
+  (println productName ":" (reduce  + (into [] (reduce-kv (fn[acc k v]
+    (if (= (get v 1) (fetchProductId productName))
+      (conj acc (+(Integer/parseInt(get v 2))))
+    acc))
+  #{} sales))))))  
 
 
 (defn salesMenu []
@@ -78,7 +96,7 @@ Enter an option?"))
     (= 3 option)  (doseq [[k v] sales]
                    (println k ":" "["(get (get cust (get v 0)) 0)"," (get (get prod (get v 1)) 0) "," (get v 2) "]"))
     (= 4 option) (opt4)
-    (= 5 option) (println "5 choice")
+    (= 5 option) (opt5)
     (= 6 option) (println "Good Bye")
     :else (println "Sorry... Please enter valid number!"))))
 (choice)
