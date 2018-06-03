@@ -5,6 +5,7 @@
   (into (sorted-map) mergedCustomer))
 
 
+
 (defn opt2 []
   (def samp2 (map #(clojure.string/split % #"\|") (clojure.string/split-lines (slurp "prod.txt"))))
   (def prod (map #(hash-map (first %1) (vec (rest %1))) samp2))
@@ -86,19 +87,21 @@ Enter an option?"))
 
 
 (defn choice []
+  (loop []
   (salesMenu)
+  
 (let [option (Integer/parseInt (read-line))]
   (cond
-    (= 1 option) (doseq [[k v] cust]
-                  (println k ":" "["(get v 0) "," (get v 1) "," (get v 2) "]"))
-    (= 2 option)  (doseq [[k v] prod]
-                   (println k ":" "["(get v 0)"," (get v 1) "]"))
-    (= 3 option)  (doseq [[k v] sales]
-                   (println k ":" "["(get (get cust (get v 0)) 0)"," (get (get prod (get v 1)) 0) "," (get v 2) "]"))
-    (= 4 option) (opt4)
-    (= 5 option) (opt5)
+    (= 1 option)  (do (doseq [[k v] cust]
+                  (println k ":" "["(get v 0) "," (get v 1) "," (get v 2) "]")) (recur))
+    (= 2 option)  (do (doseq [[k v] prod]
+                   (println k ":" "["(get v 0)"," (get v 1) "]")) (recur))
+    (= 3 option)  (do (doseq [[k v] sales]
+                   (println k ":" "["(get (get cust (get v 0)) 0)"," (get (get prod (get v 1)) 0) "," (get v 2) "]")) (recur))
+    (= 4 option) (do (opt4) (recur))
+    (= 5 option) (do (opt5) (recur))
     (= 6 option) (println "Good Bye")
-    :else (println "Sorry... Please enter valid number!"))))
+    :else (println "Sorry... Please enter valid number!")))))
 (choice)
 ;(defn  temp []
 ;  (println (get cust(get v 0))))
